@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - MONGO_URL=mongodb://db:27017/todos
+      # hostname is "db", not "localhost" - inside compose, services
+      # find each other by name. This is the fix for Step 6's error.
+  db: 
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      # keeps the actual database files around even if this container
+      # gets deleted. Without this, deleting the container wipes the data.
+
+volumes:
+  mongo-data:
